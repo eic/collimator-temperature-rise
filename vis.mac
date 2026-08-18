@@ -1,0 +1,46 @@
+# Interactive visualization macro.
+#
+# Run with:
+#   ./collimator_temp_rise vis.mac Al 50 0.1 1 1 10 output.root
+#
+# This mode is intended for checking the geometry and primary-particle
+# trajectories.  It is not needed for the numerical temperature-rise result.
+
+##-----------------------------------------##
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+/run/initialize
+##-----------------------------------------##
+/vis/open OGLIQt
+
+/vis/drawVolume
+/vis/viewer/set/viewpointThetaPhi 0. 0.
+/vis/viewer/set/autoRefresh true
+/vis/viewer/set/style surface # (wireframe, surface, cloud)
+/vis/viewer/set/hiddenEdge
+
+# to zoom
+/vis/viewer/zoom 2. 
+
+/vis/viewer/set/lineSegmentsPerCircle 1000
+/vis/scene/endOfEventAction accumulate 100
+/vis/scene/add/trajectories rich smooth
+/vis/scene/add/axes 0 0 0 0.2 m # Simple axes: x=red, y=green, z=blue.
+/vis/scene/add/date    # Date stamp
+/vis/viewer/set/style surface
+/vis/viewer/set/hiddenEdge 0
+
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawAuxPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setAuxPtsSize 10
+/vis/modeling/trajectories/drawByCharge-0/default/setTimeSliceInterval 1 s
+
+/vis/scene/list
+/vis/drawTree
+
+##-----------------------------------------##
+/run/beamOn 1
+##-----------------------------------------##

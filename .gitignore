@@ -1,0 +1,18 @@
+# Build products
+build/
+cmake-build-*/
+
+# Generated Geant4 scoring/output files
+*.csv
+*.root
+
+# macOS
+.DS_Store
+
+# ROOT / editor temporary files
+*.log
+
+# Tracked example/reference ROOT files
+!ana/edep.root
+!ana/grShockVolume_Al.root
+!ana/grMeltVolume_Al.root

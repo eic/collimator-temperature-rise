@@ -1,0 +1,36 @@
+# ---------------------------------------------------------------------------
+# Geant4 batch run for the collimator temperature-rise example.
+#
+# The scoring mesh covers 2 x 2 x 40 cm^3 and is divided into
+# 40 x 40 x 800 bins (0.5 x 0.5 x 0.5 mm^3).
+#
+# The run produces:
+#   - output.root : event/configuration metadata from RunAction
+#   - edep.csv    : 3-D deposited-energy scoring mesh from Geant4
+# ---------------------------------------------------------------------------
+
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+/run/printProgress 1
+
+/run/initialize
+
+# 3-D box scoring mesh.
+# Coordinates are in cm.  The mesh is centered at y = -2 mm to match
+# the mean beam position used in PrimaryGeneratorAction.
+/score/create/boxMesh boxMesh
+/score/mesh/boxSize 2 2 40 cm
+/score/mesh/nBin 40 40 800
+/score/mesh/translate/xyz 0. -0.2 0. cm
+
+# Score deposited energy rather than dose.  The thermal analysis later
+# converts the scored energy density into temperature rise.
+/score/quantity/energyDeposit edep
+/score/close
+
+# Demonstration statistics: 1000 primary electrons.
+/run/beamOn 1000
+
+# Write the sparse scoring mesh to a CSV file.
+/score/dumpQuantityToFile boxMesh edep edep.csv
