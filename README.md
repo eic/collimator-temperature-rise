@@ -624,20 +624,16 @@ The specific material and thermal-shock assumptions should be cited to the corre
 
 ## 18. Citation
 
-If this example is archived with the paper, replace the placeholder below with the final paper/Zenodo DOI:
+If you use this package in scientific work, please cite the associated publication/preprint and the repository release URL.
 
 ```text
-A. Natochii et al.,
+A. Natochii,
 "Collimator Temperature-Rise Example,"
-software repository, DOI: <to be assigned>.
+2026, https://github.com/eic/collimator-temperature-rise.
 ```
-
-A versioned archive (e.g. Zenodo) is recommended so that the exact code used for the published results can be permanently identified.
 
 ---
 
 ## 19. License
 
-No license is included in this demonstration package.
-
-Before public GitHub/Zenodo release, add a license appropriate for the ownership and distribution requirements of the project/institution.
+Coming soon ...
