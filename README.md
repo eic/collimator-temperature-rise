@@ -100,7 +100,7 @@ The example requires:
 - a C++17-capable compiler;
 - **CMake ≥ 3.16**.
 
-The exact Geant4 and ROOT versions used to generate the example results should be recorded in the paper/repository metadata when the code is archived. The source code does not depend on the absolute installation paths from the original development environment.
+The source code does not depend on the absolute installation paths from the original development environment.
 
 Check the installations with:
 
