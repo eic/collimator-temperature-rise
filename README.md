@@ -1,4 +1,4 @@
-# Collimator Temperature-Rise Example
+# Collimator Temperature-Rise
 
 A minimal, self-contained **Geant4 + ROOT** example demonstrating the workflow used to evaluate the instantaneous temperature rise of an electron-beam collimator.
 
