@@ -2,9 +2,17 @@
 build/
 cmake-build-*/
 
+# Analysis working directory used in the README
+results/
+
 # Generated Geant4 scoring/output files
 *.csv
 *.root
+
+# ROOT ACLiC products (e.g. root '../ana/drawScoring.C+')
+*_C.so
+*_C.d
+*_C_ACLiC_dict_rdict.pcm
 
 # macOS
 .DS_Store

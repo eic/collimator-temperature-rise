@@ -1,29 +1,29 @@
 #ifndef DetectorConstruction_H
 #define DetectorConstruction_H 1
 
-#include "RunAction.hh"
 #include "G4VUserDetectorConstruction.hh"
-#include "G4Material.hh"
-#include "G4Box.hh"
-#include "G4Trd.hh"
-#include "G4LogicalVolume.hh"
-#include "G4PVPlacement.hh"
-#include "G4NistManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4ThreeVector.hh"
-#include "G4SystemOfUnits.hh"
 #include "globals.hh"
 
+class G4Material;
+class G4VPhysicalVolume;
+class RunAction;
+
+/**
+ * Vacuum world (4 x 4 x 4 m^3) containing a simple tapered collimator jaw
+ * (G4Trd) centered at the origin.  The tip length L1, the taper tan(theta)
+ * and the material are taken from the command line via RunAction.
+ * See DetectorConstruction.cc for the geometry definition.
+ */
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
     explicit DetectorConstruction(RunAction* runAct);
-    ~DetectorConstruction() override;
+    ~DetectorConstruction() override = default;
 
     G4VPhysicalVolume* Construct() override;
 
 private:
-    G4Material* GetMaterial(G4String matName);
+    G4Material* GetMaterial(const G4String& matName);
     RunAction* _runAction;
 };
 

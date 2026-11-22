@@ -1,12 +1,19 @@
 # ---------------------------------------------------------------------------
 # Geant4 batch run for the collimator temperature-rise example.
 #
-# The scoring mesh covers 2 x 2 x 40 cm^3 and is divided into
-# 40 x 40 x 800 bins (0.5 x 0.5 x 0.5 mm^3).
+# Run with:
+#   ./collimator_temp_rise run.mac Al 50 0.1 1 1 10 output.root [seed]
+#
+# The scoring mesh covers 4 x 4 x 80 cm^3 and is divided into
+# 40 x 40 x 800 cells of 1 x 1 x 1 mm^3.
 #
 # The run produces:
-#   - output.root : event/configuration metadata from RunAction
+#   - output.root : run configuration and generated primaries (RunAction)
 #   - edep.csv    : 3-D deposited-energy scoring mesh from Geant4
+#
+# Keep in sync with the analysis (see README, "Keeping the stages consistent"):
+#   - /run/beamOn N    -> nSim argument of ana/drawScoring.C
+#   - mesh definition  -> mesh arguments of ana/readScoring.C
 # ---------------------------------------------------------------------------
 
 /run/verbose 1
@@ -17,8 +24,10 @@
 /run/initialize
 
 # 3-D box scoring mesh.
-# Coordinates are in cm.  The mesh is centered at y = -2 mm to match
-# the mean beam position used in PrimaryGeneratorAction.
+# NOTE: /score/mesh/boxSize takes HALF-lengths.  "2 2 40 cm" therefore
+# defines a 4 x 4 x 80 cm^3 box; with 40 x 40 x 800 bins each cell is
+# 1 x 1 x 1 mm^3.  The mesh is centered at y = -2 mm, the mean beam
+# position used in PrimaryGeneratorAction.
 /score/create/boxMesh boxMesh
 /score/mesh/boxSize 2 2 40 cm
 /score/mesh/nBin 40 40 800
@@ -32,5 +41,5 @@
 # Demonstration statistics: 1000 primary electrons.
 /run/beamOn 1000
 
-# Write the sparse scoring mesh to a CSV file.
+# Write the scoring mesh to a CSV file (one line per cell; MeV).
 /score/dumpQuantityToFile boxMesh edep edep.csv

@@ -1,30 +1,47 @@
 /*
- * Calculate the practical thermal-shock temperature-rise threshold for the
- * aluminum demonstration.
+ * getDeltaTempShock.C
  *
- * The criterion is based on the elastic thermal stress relation used in the
- * original study:
+ * Elastic estimate of the thermal-shock temperature-rise threshold for the
+ * aluminum demonstration:
  *
- *   DeltaT_shock = sigma_ultimate * (1 - nu) / (E * alpha)
+ *   DeltaT_elastic = sigma_UTS * (1 - nu) / (E * alpha),
  *
- * with consistent SI units.
+ * i.e. the temperature rise at which the thermal stress E alpha DeltaT / (1 - nu)
+ * reaches the ultimate tensile strength sigma_UTS.
+ *
+ * The macro also prints the practical threshold that drawScoring.C actually
+ * uses (Al.dT_shock in ThermalModel.h) and its ratio to the elastic estimate.
+ *
+ * Usage (from any directory):
+ *   root -l -b -q '../ana/getDeltaTempShock.C'
  */
+#include "ThermalModel.h"
+
+#include <iostream>
+
 void getDeltaTempShock()
 {
-	//-- Young’s modulus = Modulus of Elasticity 
-	// Aluminum: https://www.matweb.com/search/DataSheet.aspx?MatGUID=0cd1edf33ac145ee93a0aa6fc666c0e0
-	Double_t E = 68; // GPa
-	//-- Coefficient of thermal expansion (CTE)
-	Double_t a = 24.0; // um/m/K
-	//-- Poisson’s ratio
-	// Al: https://alloysintl.com/inventory/aluminum-alloys-supplier-old/aluminum-1100/
-	Double_t nu = 0.330; 
-	//-- Thermal stress = Tensile Strength, Ultimate  
-	// Al: https://alloysintl.com/inventory/aluminum-alloys-supplier-old/aluminum-1100/
-	Double_t sigma_ultimate = 90; // MPa
+    // Young's modulus (modulus of elasticity) [GPa]
+    // Aluminum: https://www.matweb.com/search/DataSheet.aspx?MatGUID=0cd1edf33ac145ee93a0aa6fc666c0e0
+    const double E = 68.0;
+    // Coefficient of thermal expansion [um/m/K]
+    const double alpha = 24.0;
+    // Poisson's ratio
+    // Al 1100: https://alloysintl.com/inventory/aluminum-alloys-supplier-old/aluminum-1100/
+    const double nu = 0.330;
+    // Ultimate tensile strength [MPa]
+    // Al 1100: https://alloysintl.com/inventory/aluminum-alloys-supplier-old/aluminum-1100/
+    const double sigma_ultimate = 90.0;
 
-	cout<<"Al : E = "<<E<<" [GPa] | alpha = "<<a<<" [um/m/K] | nu = "<<nu<<" | sigma = "<<sigma_ultimate<<" [MPa]";
-	cout<<" ==> dT_shock = "<<sigma_ultimate*1e-3*(1.0-nu)/(E*a*1e-6)<<" [K]"<<endl;
+    // SI units: MPa -> Pa (1e6), GPa -> Pa (1e9), um/m/K -> 1/K (1e-6).
+    const double dT_elastic =
+        (sigma_ultimate * 1e6) * (1.0 - nu) / ((E * 1e9) * (alpha * 1e-6));   // [K]
 
-	return;
+    std::cout << "Al : E = " << E << " [GPa] | alpha = " << alpha << " [um/m/K] | nu = "
+              << nu << " | sigma_UTS = " << sigma_ultimate << " [MPa]" << std::endl;
+    std::cout << "Elastic estimate sigma_UTS (1 - nu) / (E alpha) = " << dT_elastic
+              << " [K]" << std::endl;
+    std::cout << "Practical threshold used by drawScoring.C (Al.dT_shock) = "
+              << Al.dT_shock << " [K] = " << Al.dT_shock / dT_elastic
+              << " x elastic estimate" << std::endl;
 }
